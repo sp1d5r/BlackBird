@@ -13,6 +13,9 @@
 		0143EB3526D566C000C3E2E5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0143EB3426D566C000C3E2E5 /* Preview Assets.xcassets */; };
 		0143EB4026D566C100C3E2E5 /* BlackbirdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB3F26D566C100C3E2E5 /* BlackbirdTests.swift */; };
 		0143EB4B26D566C100C3E2E5 /* BlackbirdUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB4A26D566C100C3E2E5 /* BlackbirdUITests.swift */; };
+		0143EB5F26D69B9F00C3E2E5 /* LoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB5E26D69B9F00C3E2E5 /* LoginPage.swift */; };
+		0143EB6526D6A68600C3E2E5 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB6426D6A68600C3E2E5 /* Placeholder.swift */; };
+		0143EB6E26D6A6D600C3E2E5 /* SignUpPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB6D26D6A6D600C3E2E5 /* SignUpPage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +48,9 @@
 		0143EB4626D566C100C3E2E5 /* BlackbirdUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlackbirdUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0143EB4A26D566C100C3E2E5 /* BlackbirdUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackbirdUITests.swift; sourceTree = "<group>"; };
 		0143EB4C26D566C100C3E2E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0143EB5E26D69B9F00C3E2E5 /* LoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPage.swift; sourceTree = "<group>"; };
+		0143EB6426D6A68600C3E2E5 /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
+		0143EB6D26D6A6D600C3E2E5 /* SignUpPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +101,8 @@
 		0143EB2C26D566BE00C3E2E5 /* Blackbird */ = {
 			isa = PBXGroup;
 			children = (
+				0143EB6C26D6A6B800C3E2E5 /* LoginAndSignUp */,
+				0143EB6326D6A67800C3E2E5 /* utils */,
 				0143EB2D26D566BE00C3E2E5 /* BlackbirdApp.swift */,
 				0143EB2F26D566BE00C3E2E5 /* ContentView.swift */,
 				0143EB3126D566C000C3E2E5 /* Assets.xcassets */,
@@ -128,6 +136,23 @@
 				0143EB4C26D566C100C3E2E5 /* Info.plist */,
 			);
 			path = BlackbirdUITests;
+			sourceTree = "<group>";
+		};
+		0143EB6326D6A67800C3E2E5 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				0143EB6426D6A68600C3E2E5 /* Placeholder.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		0143EB6C26D6A6B800C3E2E5 /* LoginAndSignUp */ = {
+			isa = PBXGroup;
+			children = (
+				0143EB5E26D69B9F00C3E2E5 /* LoginPage.swift */,
+				0143EB6D26D6A6D600C3E2E5 /* SignUpPage.swift */,
+			);
+			path = LoginAndSignUp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,7 +285,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0143EB3026D566BE00C3E2E5 /* ContentView.swift in Sources */,
+				0143EB6E26D6A6D600C3E2E5 /* SignUpPage.swift in Sources */,
+				0143EB5F26D69B9F00C3E2E5 /* LoginPage.swift in Sources */,
 				0143EB2E26D566BE00C3E2E5 /* BlackbirdApp.swift in Sources */,
+				0143EB6526D6A68600C3E2E5 /* Placeholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
