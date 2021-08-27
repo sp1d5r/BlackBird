@@ -150,13 +150,3 @@ struct BackgroundStack: View {
         }
     }
 }
-
-
-struct ContentView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        Group {
-            BackgroundStack()
-        }
-    }
-}

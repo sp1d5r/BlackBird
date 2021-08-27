@@ -16,6 +16,15 @@
 		0143EB5F26D69B9F00C3E2E5 /* LoginPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB5E26D69B9F00C3E2E5 /* LoginPage.swift */; };
 		0143EB6526D6A68600C3E2E5 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB6426D6A68600C3E2E5 /* Placeholder.swift */; };
 		0143EB6E26D6A6D600C3E2E5 /* SignUpPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB6D26D6A6D600C3E2E5 /* SignUpPage.swift */; };
+		0143EB7B26D6C79400C3E2E5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0143EB7A26D6C79400C3E2E5 /* CloudKit.framework */; };
+		0143EB8326D6D72700C3E2E5 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB8226D6D72700C3E2E5 /* CloudKitManager.swift */; };
+		0143EB8926D6DAE700C3E2E5 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB8826D6DAE700C3E2E5 /* Users.swift */; };
+		0143EB9126D6DB1D00C3E2E5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB9026D6DB1D00C3E2E5 /* Message.swift */; };
+		0143EB9826D6DB7600C3E2E5 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB9726D6DB7600C3E2E5 /* MessageContent.swift */; };
+		0143EB9D26D6DC1000C3E2E5 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB9C26D6DC1000C3E2E5 /* ConversationView.swift */; };
+		0143EBA226D6DD3A00C3E2E5 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EBA126D6DD3A00C3E2E5 /* MessageView.swift */; };
+		0143EBAA26D6E07100C3E2E5 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EBA926D6E07100C3E2E5 /* Data.swift */; };
+		0154CE7D26D8FCDF009611E5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CE7C26D8FCDF009611E5 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +60,16 @@
 		0143EB5E26D69B9F00C3E2E5 /* LoginPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPage.swift; sourceTree = "<group>"; };
 		0143EB6426D6A68600C3E2E5 /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
 		0143EB6D26D6A6D600C3E2E5 /* SignUpPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPage.swift; sourceTree = "<group>"; };
+		0143EB7526D6C78400C3E2E5 /* Blackbird.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blackbird.entitlements; sourceTree = "<group>"; };
+		0143EB7A26D6C79400C3E2E5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		0143EB8226D6D72700C3E2E5 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		0143EB8826D6DAE700C3E2E5 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
+		0143EB9026D6DB1D00C3E2E5 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		0143EB9726D6DB7600C3E2E5 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
+		0143EB9C26D6DC1000C3E2E5 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
+		0143EBA126D6DD3A00C3E2E5 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		0143EBA926D6E07100C3E2E5 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		0154CE7C26D8FCDF009611E5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0143EB7B26D6C79400C3E2E5 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +105,7 @@
 				0143EB3E26D566C100C3E2E5 /* BlackbirdTests */,
 				0143EB4926D566C100C3E2E5 /* BlackbirdUITests */,
 				0143EB2B26D566BE00C3E2E5 /* Products */,
+				0143EB7926D6C79400C3E2E5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +122,11 @@
 		0143EB2C26D566BE00C3E2E5 /* Blackbird */ = {
 			isa = PBXGroup;
 			children = (
+				0143EBB926D7E4F000C3E2E5 /* Homepage */,
+				0143EB9626D6DB6400C3E2E5 /* Data */,
+				0143EB9526D6DB4500C3E2E5 /* Conversation */,
+				0143EB8726D6DAD900C3E2E5 /* DataTypes */,
+				0143EB7526D6C78400C3E2E5 /* Blackbird.entitlements */,
 				0143EB6C26D6A6B800C3E2E5 /* LoginAndSignUp */,
 				0143EB6326D6A67800C3E2E5 /* utils */,
 				0143EB2D26D566BE00C3E2E5 /* BlackbirdApp.swift */,
@@ -108,6 +134,7 @@
 				0143EB3126D566C000C3E2E5 /* Assets.xcassets */,
 				0143EB3626D566C000C3E2E5 /* Info.plist */,
 				0143EB3326D566C000C3E2E5 /* Preview Content */,
+				0143EB8226D6D72700C3E2E5 /* CloudKitManager.swift */,
 			);
 			path = Blackbird;
 			sourceTree = "<group>";
@@ -142,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				0143EB6426D6A68600C3E2E5 /* Placeholder.swift */,
+				0154CE7C26D8FCDF009611E5 /* ImagePicker.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -153,6 +181,48 @@
 				0143EB6D26D6A6D600C3E2E5 /* SignUpPage.swift */,
 			);
 			path = LoginAndSignUp;
+			sourceTree = "<group>";
+		};
+		0143EB7926D6C79400C3E2E5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0143EB7A26D6C79400C3E2E5 /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0143EB8726D6DAD900C3E2E5 /* DataTypes */ = {
+			isa = PBXGroup;
+			children = (
+				0143EB8826D6DAE700C3E2E5 /* Users.swift */,
+				0143EB9026D6DB1D00C3E2E5 /* Message.swift */,
+			);
+			path = DataTypes;
+			sourceTree = "<group>";
+		};
+		0143EB9526D6DB4500C3E2E5 /* Conversation */ = {
+			isa = PBXGroup;
+			children = (
+				0143EB9726D6DB7600C3E2E5 /* MessageContent.swift */,
+				0143EB9C26D6DC1000C3E2E5 /* ConversationView.swift */,
+				0143EBA126D6DD3A00C3E2E5 /* MessageView.swift */,
+			);
+			path = Conversation;
+			sourceTree = "<group>";
+		};
+		0143EB9626D6DB6400C3E2E5 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				0143EBA926D6E07100C3E2E5 /* Data.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		0143EBB926D7E4F000C3E2E5 /* Homepage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Homepage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,11 +354,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0154CE7D26D8FCDF009611E5 /* ImagePicker.swift in Sources */,
 				0143EB3026D566BE00C3E2E5 /* ContentView.swift in Sources */,
 				0143EB6E26D6A6D600C3E2E5 /* SignUpPage.swift in Sources */,
+				0143EB9826D6DB7600C3E2E5 /* MessageContent.swift in Sources */,
+				0143EB8326D6D72700C3E2E5 /* CloudKitManager.swift in Sources */,
 				0143EB5F26D69B9F00C3E2E5 /* LoginPage.swift in Sources */,
 				0143EB2E26D566BE00C3E2E5 /* BlackbirdApp.swift in Sources */,
+				0143EBA226D6DD3A00C3E2E5 /* MessageView.swift in Sources */,
+				0143EBAA26D6E07100C3E2E5 /* Data.swift in Sources */,
+				0143EB9126D6DB1D00C3E2E5 /* Message.swift in Sources */,
 				0143EB6526D6A68600C3E2E5 /* Placeholder.swift in Sources */,
+				0143EB8926D6DAE700C3E2E5 /* Users.swift in Sources */,
+				0143EB9D26D6DC1000C3E2E5 /* ConversationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,6 +523,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Blackbird/Blackbird.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Blackbird/Preview Content\"";
 				DEVELOPMENT_TEAM = VUYN7Z8LL9;
@@ -467,6 +546,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Blackbird/Blackbird.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Blackbird/Preview Content\"";
 				DEVELOPMENT_TEAM = VUYN7Z8LL9;

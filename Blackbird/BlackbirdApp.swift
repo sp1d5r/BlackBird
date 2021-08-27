@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct BlackbirdApp: App {
+    @StateObject private var order = ChatHelper()
+    init() {
+            UITableView.appearance().backgroundColor = .clear
+        }
+
     var body: some Scene {
         WindowGroup {
-            BackgroundStack()
+            BackgroundStack().environmentObject(order)
         }
     }
 }
