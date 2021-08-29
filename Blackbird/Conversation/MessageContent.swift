@@ -24,6 +24,6 @@ struct ContentMessageView: View {
 
 struct ContentMessageView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentMessageView(contentMessage: DataSource.messages[0].content, isCurrentUser: DataSource.messages[0].user.isCurrentUser)
+        ContentMessageView(contentMessage: "Content", isCurrentUser: true)
     }
 }

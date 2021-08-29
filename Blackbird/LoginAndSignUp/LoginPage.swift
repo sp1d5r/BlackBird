@@ -7,9 +7,11 @@
 
 import Foundation
 import SwiftUI
+import CloudKit
 
 class UserLogin: ObservableObject {
     @Published var login = false
+    @Published var storedCredentials = false
     @Published var username = ""
     @Published var fullname = ""
     @Published var currentUser : ExampleUser = ExampleUser(username: "", full_name: "", password: "", bio: "", email: "", avatar: UIImage(named: "my-avatar")!)
@@ -22,11 +24,17 @@ class Nav: ObservableObject {
 
 struct LoginForum : View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var authentication: Authentication
     
     @State var password: String = ""
     @State var changing = false
+    @State var error = false
+    @State var loading = false
     @Binding var login : Bool
     @Binding var username: String
+    @Binding var currentUser : ExampleUser
+    @Binding var storedCredentials: Bool
+    
     
     func handleLogin() {
         if (username == "Elijah" && password == ""){
@@ -55,17 +63,79 @@ struct LoginForum : View {
                     Spacer()
                     Spacer()
                 }
-                Spacer()
+                
+                if (error) {Text("Login Failed").foregroundColor(Color(red: 100/255, green: 52/255, blue: 57/255))} else {Spacer()}
                 TextField("", text: $username)
-                    .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty, placeholder: "Username")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10)
+                    .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty, placeholder: "Username")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).autocapitalization(.none).textContentType(.username).disableAutocorrection(true)
                 
                 
-                TextField("", text: $password)
-                    .modifier(PlaceholderStyle(showPlaceHolder: password.isEmpty, placeholder: "Password")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10)
+                SecureField("", text: $password)
+                    .modifier(PlaceholderStyle(showPlaceHolder: password.isEmpty, placeholder: "Password")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).textContentType(.password)
                 Spacer()
                 Spacer()
-                Button(action: {handleLogin()}){Text("Login").frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 1/255, green: 0/255, blue: 0/255)).cornerRadius(10).foregroundColor(.white)}
-                
+                Button(action: {
+                        loading = true
+                        tryLogin(username: username, password: password){(result) in
+                        switch result {
+                        case .success(let user):
+                            currentUser = user
+                            if !storedCredentials {
+                                if KeyChainStorage.saveCredentials(Credentials(username: username, password: password)) {
+                                    print("Credentials Saved")
+                                    storedCredentials = true
+                                }
+                            }
+                            print("Successfullly Logged in baby!!")
+                            login = true
+                        case .failure(let err):
+                            error = true
+                            print(err.localizedDescription)
+                        }
+                    }
+                    loading = false
+                }){
+                    if (!loading) {
+                        HStack {
+                            Text("Login").frame(width: UIScreen.screenWidth * 5 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 1/255, green: 0/255, blue: 0/255)).cornerRadius(10).foregroundColor(.white)
+                            if authentication.theType() != .none {
+                                
+                                Button {
+                                    authentication.requestBiometricUnlock {
+                                        (result) in
+                                        switch result {
+                                        case .success(let credentials):
+                                            username = credentials.username
+                                            password = credentials.password
+                                            
+                                            loading = true
+                                            tryLogin(username: username, password: password){(result) in
+                                            switch result {
+                                            case .success(let user):
+                                                currentUser = user
+                                                print("Successfullly Logged in baby!!")
+                                                login = true
+                                            case .failure(let err):
+                                                error = true
+                                                print(err.localizedDescription)
+                                            }
+                                        }
+                                        loading = false
+                                        case .failure(let error):
+                                            print(error)
+                                            
+                                        }
+                                    }
+                                } label : {
+                                    Image(systemName: authentication.theType() == .face ? "faceid" : "touchid")
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                }
+                            }
+                        }
+                    } else {
+                        Text("Loading").frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 100/255, blue: 57/255)).cornerRadius(10).foregroundColor(Color(.white))
+                    }
+                }
                 Spacer()
             }.opacity(changing ? 0 : 1)
         ).navigationBarBackButtonHidden(true)
@@ -74,10 +144,7 @@ struct LoginForum : View {
     
 }
 
-func goToUser(username: String, messages: inout Bool){
-    print("hello")
-    messages = !messages
-}
+
 
 func returnFromUser(messages : inout Bool){
     messages = !messages
@@ -88,72 +155,115 @@ func goToSettings(settings: inout Bool) {
     settings = !settings
 }
 
-func logOut(login: inout Bool){
+func logOut(login: inout Bool, settings: inout Bool){
     login = !login
+    settings = false
+}
+
+class ObservableConversation : ObservableObject {
+    @Published var conversations : [Conversation] = []
+    @Published var convoUsers : [ExampleUser] = []
 }
 
 struct LoginSuccess : View {
+    
     @State var changing = false
     @State var opacity1 : Double = 0
     @State var opacity2 : Double = 0
+    @State var newUsername : String = ""
+    @State var home : Bool = true
     @Binding var login : Bool
-    @Binding var username: String
     
    // Navigation Booleans
     @Binding var settings : Bool
     @Binding var messages : Bool
     @Binding var currentUser : ExampleUser
+    typealias FinishedDownload = () -> ()
+    
+    @StateObject var observableConversations = ObservableConversation()
+    @State var currentConversation: String = ""
+    @State var currentConvoUser: ExampleUser = ExampleUser(username: "", full_name: "", password: "", bio: "", email: "", avatar: UIImage())
     
     
+    func goToUser(username: String, messages: inout Bool) {
+        // These should always be true,
+        print("Looking for the username :", username)
+        for conversation in observableConversations.conversations {
+            if conversation.users.contains(username) {
+                currentConversation = conversation.recordID?.recordName ?? ""
+                print("Found the username with convoid", currentConversation)
+                messages = true
+            }
+        }
+        print("Looking for the user ")
+        let user = isInConvoUsers(username: username)
+        if (user != nil){
+            print("Found it! ")
+            currentConvoUser = user!
+        } else {
+            messages = false
+        }
+    }
     
+    func initialUpdateConversation(completed: FinishedDownload) {
+        print("Intiial Update")
+        
+        getConversations(username: currentUser.username){(result) in
+            switch result {
+            case .success(let conversation):
+                print("Succesffully got conversation")
+                print(conversation.id)
+                if (!observableConversations.conversations.contains(conversation)){
+                    observableConversations.conversations.append(conversation)
+                    updateConversations()
+                }
+            case .failure(let error):
+                print("Failure getting initial conversations.")
+                print(error)
+            }
+        }
+    }
+    
+    func updateConversations(){
+        for conversation in observableConversations.conversations.uniqued(){
+            print("Conversation: ", conversation.users)
+            let otherUser = (conversation.users[0] == currentUser.username) ? conversation.users[1] : conversation.users[0]
+
+            getUserDetails(username: otherUser) {(record) in
+                switch record{
+                case .success(let exampleUser):
+                    if (!(observableConversations.convoUsers.contains(exampleUser))){
+                        print("Added user %@ to convo users", exampleUser.username)
+                        observableConversations.convoUsers.append(exampleUser)
+                    }
+
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        
+    }
+    
+    func isInConvoUsers(username: String) -> ExampleUser?{
+        for user in observableConversations.convoUsers{
+            if (user.username == username) {
+                return user
+            }
+        }
+        return nil
+    }
     
     var body: some View {
         
         if (settings) {
-            Color(red: 3/255, green: 15/255, blue: 17/255).ignoresSafeArea().overlay(
-                VStack(alignment: .leading){
-                    HStack{
-                        
-                        Button(action: {goToSettings(settings: &settings)}) {
-                            Text("Back").fontWeight(.bold).foregroundColor(Color.white).padding()
-                        }
-                        VStack{Rectangle().frame(maxWidth: .infinity, maxHeight: 1.0,  alignment: .bottom)
-                            .foregroundColor(Color.white)
-                        }
-                        
-                    
-                        Spacer()
-                    }.frame(maxWidth: .infinity, maxHeight: UIScreen.screenHeight / 10).opacity(opacity1)
-                    .animation(.easeInOut(duration: 2))
-                    .onAppear() {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                            opacity1 = 1
-                        }
-                    }
-                    VStack{
-                        Text("Update username").foregroundColor(.white)
-                        TextField("", text: $username)
-                            .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty, placeholder: currentUser.username)).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10)
-                        Text("Update email").foregroundColor(.white).padding()
-                        TextField("", text: $username)
-                            .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty, placeholder: currentUser.email)).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10)
-                        Text("Update password").foregroundColor(.white).padding()
-                        TextField("", text: $username)
-                            .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty, placeholder: "Password")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10)
-                        Text("Update avatar").foregroundColor(.white).padding()
-                        Button(action: {print("I'm supposed to handle avatar updates.")}) {
-                            Text("Update Avatar").foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10)
-                        }
-                        Button(action: {logOut(login: &login)}) {
-                            Text("Log Out").foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 100/255, green: 52/255, blue: 57/255)).cornerRadius(10).padding()
-                        }
-                    }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            ).navigationBarTitle("")
-            .navigationBarHidden(true)
-            
+            Settings(opacity1: $opacity1, settings: $settings, messages: $messages, login: $login, currentUser: $currentUser)
         } else if (messages){
-            ConversationView(messages: $messages).navigationBarTitle("")
+            ConversationView(messages: $messages,
+                             conversationID: $currentConversation,
+                             currentUser: $currentUser,
+                             otherUser: $currentConvoUser
+                             ).navigationBarTitle("")
                 .navigationBarHidden(true)
         } else {
             Color(red: 3/255, green: 15/255, blue: 17/255).ignoresSafeArea().overlay(
@@ -163,7 +273,7 @@ struct LoginSuccess : View {
                             .foregroundColor(Color.white)
                         }
                         Button(action: {goToSettings(settings: &settings)}) {
-                            Text("Elijah Ahmad").fontWeight(.bold).foregroundColor(Color.white).padding()
+                            Text(currentUser.full_name).fontWeight(.bold).foregroundColor(Color.white).padding()
                         }
                             
                         Spacer()
@@ -175,27 +285,69 @@ struct LoginSuccess : View {
                         }
                     }
                     VStack{
-                        List {
+                        HStack {
+                            Spacer()
+                            TextField("", text: $newUsername)
+                                .modifier(PlaceholderStyle(showPlaceHolder: newUsername.isEmpty, placeholder: "username")).foregroundColor(.white).frame(maxWidth: .infinity).background(Color(red: 25/255, green: 32/255, blue: 37/255)).cornerRadius(10).disableAutocorrection(true).autocapitalization(.none)
+                            Button {
+                                if (newUsername != currentUser.username && newUsername != "" && isInConvoUsers(username: newUsername) == nil){
+                                    createConversation(user1: currentUser.username, user2: newUsername) {(record) in
+                                        switch record{
+                                        case .success(let conversation):
+                                            print("Successfully created a conversation.")
+                                            print(conversation.id)
+                                            // Now get user data
+                                            if (!(observableConversations.conversations.contains(conversation))){
+                                                print("here")
+                                                observableConversations.conversations.append(conversation)
+                                                updateConversations()
+                                            }
+                                            
+                                        case .failure(let error):
+                                            print("Failed to create conversation, with %@ and %@", [newUsername, currentUser.username])
+                                            print(error)
+                                        }
+                                    }
+                                }
+                                newUsername = ""
+                            } label : {
+                                Text("Add User").foregroundColor(.white).padding(.horizontal, 5)
+                                Image(systemName: "paperplane.circle")
+                                    .resizable()
+                                    .frame(width: 20, height: 20).foregroundColor(.white).padding(.trailing, 5).padding()
+                            }
+                            
+                        }
+                        List() {
                             
                             // The Button I just Made
                             
-                            Button(action : {goToUser(username: "hello", messages: &messages)}) {
-                                HStack{
-                                    Image(uiImage: currentUser.avatar)
-                                        .resizable()
-                                        .frame(width: 50, height: 50, alignment: .center)
-                                        .cornerRadius(25)
-                                    VStack{
-                                        HStack{
-                                            Text(currentUser.username).fontWeight(.medium).foregroundColor(.white)
-                                            Circle().frame(maxWidth: 5, maxHeight: 5).foregroundColor(.white)
-                                        }.frame(maxWidth: .infinity, alignment: .leading).padding(.leading, 10)
-                                        Text("Hey Sexy, when are you coming? home broski! ").fontWeight(.thin).foregroundColor(.white).frame(maxWidth: .infinity, maxHeight: 50)
-                                    }.frame(maxWidth: UIScreen.screenWidth*3/4, alignment: .topLeading)
-                                }
+                            HStack{
+                                Text("Associates").foregroundColor(.white)
+                                
                             }.listRowBackground(Color(red: 3/255, green: 15/255, blue: 17/255))
                             
                             // END OF BUTTON
+                            
+                            ForEach(observableConversations.convoUsers, id: \.username) { user in
+                                
+                                Button(action : {goToUser(username: user.username, messages: &messages)}) {
+                                    HStack{
+                                        Image(uiImage: user.avatar)
+                                            .resizable()
+                                            .frame(width: 50, height: 50, alignment: .center)
+                                            .cornerRadius(25)
+                                        VStack{
+                                            HStack{
+                                                Text(user.full_name).fontWeight(.medium).foregroundColor(.white)
+                                                Circle().frame(maxWidth: 5, maxHeight: 5).foregroundColor(.white)
+                                            }.frame(maxWidth: .infinity, alignment: .leading).padding(.leading, 10)
+                                            Text("Hey Sexy, when are you coming? home broski!").fontWeight(.thin).foregroundColor(.white).frame(maxWidth: .infinity, maxHeight: 50)
+                                        }.frame(maxWidth: UIScreen.screenWidth*3/4, alignment: .topLeading)
+                                    }
+                                }.listRowBackground(Color(red: 3/255, green: 15/255, blue: 17/255))
+                            }
+                            
                                 
                         }
                         .opacity(0.7).onAppear {
@@ -211,7 +363,16 @@ struct LoginSuccess : View {
                     }
                 }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             ).navigationBarTitle("")
-            .navigationBarHidden(true)
+            .navigationBarHidden(true).onAppear(perform: {
+                
+                // To deal with this just keep conversations here and keep user ID's in a separate page.
+                // so deal with for loops using conversations here and then return a new view
+                // this will grab the other user details render them. It'll also deal with
+                // updating the user details. 
+                
+               initialUpdateConversation{() -> () in print("Gets here")}
+                initialUpdateConversation{() -> () in print("Gets here")}
+            })
         }
     }
     
@@ -228,9 +389,9 @@ struct LoginPage: View {
     
     var body : some View {
         if (self.input.login) {
-            LoginSuccess(login: self.$input.login, username: self.$input.username, settings: self.$nav.settings, messages: self.$nav.messages, currentUser: self.$input.currentUser)
+            LoginSuccess(login: self.$input.login, settings: self.$nav.settings, messages: self.$nav.messages, currentUser: self.$input.currentUser)
         } else {
-            LoginForum(login: self.$input.login, username: self.$input.username)
+            LoginForum(login: self.$input.login, username: self.$input.username, currentUser: self.$input.currentUser, storedCredentials: self.$input.storedCredentials).environmentObject(Authentication())
         }
         
     }

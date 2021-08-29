@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
-
+/*
 struct Data1 {
     var messages : [Message]
 }
@@ -50,3 +50,5 @@ final class KeyboardResponder: ObservableObject {
         currentHeight = 0
     }
 }
+
+*/

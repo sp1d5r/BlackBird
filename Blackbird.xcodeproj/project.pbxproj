@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,13 +18,22 @@
 		0143EB6E26D6A6D600C3E2E5 /* SignUpPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB6D26D6A6D600C3E2E5 /* SignUpPage.swift */; };
 		0143EB7B26D6C79400C3E2E5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0143EB7A26D6C79400C3E2E5 /* CloudKit.framework */; };
 		0143EB8326D6D72700C3E2E5 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB8226D6D72700C3E2E5 /* CloudKitManager.swift */; };
-		0143EB8926D6DAE700C3E2E5 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB8826D6DAE700C3E2E5 /* Users.swift */; };
-		0143EB9126D6DB1D00C3E2E5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB9026D6DB1D00C3E2E5 /* Message.swift */; };
 		0143EB9826D6DB7600C3E2E5 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB9726D6DB7600C3E2E5 /* MessageContent.swift */; };
 		0143EB9D26D6DC1000C3E2E5 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EB9C26D6DC1000C3E2E5 /* ConversationView.swift */; };
 		0143EBA226D6DD3A00C3E2E5 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EBA126D6DD3A00C3E2E5 /* MessageView.swift */; };
 		0143EBAA26D6E07100C3E2E5 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143EBA926D6E07100C3E2E5 /* Data.swift */; };
 		0154CE7D26D8FCDF009611E5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CE7C26D8FCDF009611E5 /* ImagePicker.swift */; };
+		0154CE8226D97178009611E5 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CE8126D97178009611E5 /* KeyChain.swift */; };
+		0154CE8826D97F93009611E5 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 0154CE8726D97F93009611E5 /* SwiftKeychainWrapper */; };
+		0154CE8D26D97FA0009611E5 /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CE8C26D97FA0009611E5 /* Credentials.swift */; };
+		0154CE9526D981DA009611E5 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CE9426D981DA009611E5 /* Authentication.swift */; };
+		0154CE9B26DA84D8009611E5 /* People.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CE9A26DA84D8009611E5 /* People.swift */; };
+		0154CEA326DA8511009611E5 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEA226DA8511009611E5 /* Conversation.swift */; };
+		0154CEB126DAA972009611E5 /* Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEB026DAA972009611E5 /* Unique.swift */; };
+		0154CEB626DAC102009611E5 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEB526DAC102009611E5 /* Messages.swift */; };
+		0154CEBC26DACB25009611E5 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEBB26DACB25009611E5 /* Settings.swift */; };
+		0154CEC126DAFA2D009611E5 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEC026DAFA2D009611E5 /* KeyboardHelper.swift */; };
+		0154CEC626DB67E4009611E5 /* WebCredentialsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEC526DB67E4009611E5 /* WebCredentialsHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,13 +72,21 @@
 		0143EB7526D6C78400C3E2E5 /* Blackbird.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blackbird.entitlements; sourceTree = "<group>"; };
 		0143EB7A26D6C79400C3E2E5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		0143EB8226D6D72700C3E2E5 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
-		0143EB8826D6DAE700C3E2E5 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
-		0143EB9026D6DB1D00C3E2E5 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		0143EB9726D6DB7600C3E2E5 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
 		0143EB9C26D6DC1000C3E2E5 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
 		0143EBA126D6DD3A00C3E2E5 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		0143EBA926D6E07100C3E2E5 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		0154CE7C26D8FCDF009611E5 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		0154CE8126D97178009611E5 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		0154CE8C26D97FA0009611E5 /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
+		0154CE9426D981DA009611E5 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		0154CE9A26DA84D8009611E5 /* People.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = People.swift; sourceTree = "<group>"; };
+		0154CEA226DA8511009611E5 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		0154CEB026DAA972009611E5 /* Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unique.swift; sourceTree = "<group>"; };
+		0154CEB526DAC102009611E5 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		0154CEBB26DACB25009611E5 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		0154CEC026DAFA2D009611E5 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
+		0154CEC526DB67E4009611E5 /* WebCredentialsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCredentialsHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0154CE8826D97F93009611E5 /* SwiftKeychainWrapper in Frameworks */,
 				0143EB7B26D6C79400C3E2E5 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,10 +140,10 @@
 		0143EB2C26D566BE00C3E2E5 /* Blackbird */ = {
 			isa = PBXGroup;
 			children = (
+				0154CEBA26DACB19009611E5 /* Settings */,
 				0143EBB926D7E4F000C3E2E5 /* Homepage */,
 				0143EB9626D6DB6400C3E2E5 /* Data */,
 				0143EB9526D6DB4500C3E2E5 /* Conversation */,
-				0143EB8726D6DAD900C3E2E5 /* DataTypes */,
 				0143EB7526D6C78400C3E2E5 /* Blackbird.entitlements */,
 				0143EB6C26D6A6B800C3E2E5 /* LoginAndSignUp */,
 				0143EB6326D6A67800C3E2E5 /* utils */,
@@ -170,6 +188,11 @@
 			children = (
 				0143EB6426D6A68600C3E2E5 /* Placeholder.swift */,
 				0154CE7C26D8FCDF009611E5 /* ImagePicker.swift */,
+				0154CE8126D97178009611E5 /* KeyChain.swift */,
+				0154CE9426D981DA009611E5 /* Authentication.swift */,
+				0154CEB026DAA972009611E5 /* Unique.swift */,
+				0154CEC026DAFA2D009611E5 /* KeyboardHelper.swift */,
+				0154CEC526DB67E4009611E5 /* WebCredentialsHelper.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -191,15 +214,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		0143EB8726D6DAD900C3E2E5 /* DataTypes */ = {
-			isa = PBXGroup;
-			children = (
-				0143EB8826D6DAE700C3E2E5 /* Users.swift */,
-				0143EB9026D6DB1D00C3E2E5 /* Message.swift */,
-			);
-			path = DataTypes;
-			sourceTree = "<group>";
-		};
 		0143EB9526D6DB4500C3E2E5 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +228,10 @@
 			isa = PBXGroup;
 			children = (
 				0143EBA926D6E07100C3E2E5 /* Data.swift */,
+				0154CE8C26D97FA0009611E5 /* Credentials.swift */,
+				0154CE9A26DA84D8009611E5 /* People.swift */,
+				0154CEA226DA8511009611E5 /* Conversation.swift */,
+				0154CEB526DAC102009611E5 /* Messages.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -223,6 +241,14 @@
 			children = (
 			);
 			path = Homepage;
+			sourceTree = "<group>";
+		};
+		0154CEBA26DACB19009611E5 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				0154CEBB26DACB25009611E5 /* Settings.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,6 +267,9 @@
 			dependencies = (
 			);
 			name = Blackbird;
+			packageProductDependencies = (
+				0154CE8726D97F93009611E5 /* SwiftKeychainWrapper */,
+			);
 			productName = Blackbird;
 			productReference = 0143EB2A26D566BE00C3E2E5 /* Blackbird.app */;
 			productType = "com.apple.product-type.application";
@@ -312,6 +341,9 @@
 				Base,
 			);
 			mainGroup = 0143EB2126D566BE00C3E2E5;
+			packageReferences = (
+				0154CE8626D97F93009611E5 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+			);
 			productRefGroup = 0143EB2B26D566BE00C3E2E5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -355,18 +387,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				0154CE7D26D8FCDF009611E5 /* ImagePicker.swift in Sources */,
+				0154CEB626DAC102009611E5 /* Messages.swift in Sources */,
+				0154CEC626DB67E4009611E5 /* WebCredentialsHelper.swift in Sources */,
 				0143EB3026D566BE00C3E2E5 /* ContentView.swift in Sources */,
 				0143EB6E26D6A6D600C3E2E5 /* SignUpPage.swift in Sources */,
+				0154CEC126DAFA2D009611E5 /* KeyboardHelper.swift in Sources */,
+				0154CEB126DAA972009611E5 /* Unique.swift in Sources */,
 				0143EB9826D6DB7600C3E2E5 /* MessageContent.swift in Sources */,
 				0143EB8326D6D72700C3E2E5 /* CloudKitManager.swift in Sources */,
 				0143EB5F26D69B9F00C3E2E5 /* LoginPage.swift in Sources */,
 				0143EB2E26D566BE00C3E2E5 /* BlackbirdApp.swift in Sources */,
 				0143EBA226D6DD3A00C3E2E5 /* MessageView.swift in Sources */,
 				0143EBAA26D6E07100C3E2E5 /* Data.swift in Sources */,
-				0143EB9126D6DB1D00C3E2E5 /* Message.swift in Sources */,
+				0154CE8D26D97FA0009611E5 /* Credentials.swift in Sources */,
 				0143EB6526D6A68600C3E2E5 /* Placeholder.swift in Sources */,
-				0143EB8926D6DAE700C3E2E5 /* Users.swift in Sources */,
+				0154CEA326DA8511009611E5 /* Conversation.swift in Sources */,
+				0154CE8226D97178009611E5 /* KeyChain.swift in Sources */,
 				0143EB9D26D6DC1000C3E2E5 /* ConversationView.swift in Sources */,
+				0154CE9526D981DA009611E5 /* Authentication.swift in Sources */,
+				0154CE9B26DA84D8009611E5 /* People.swift in Sources */,
+				0154CEBC26DACB25009611E5 /* Settings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,6 +728,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0154CE8626D97F93009611E5 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0154CE8726D97F93009611E5 /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0154CE8626D97F93009611E5 /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0143EB2226D566BE00C3E2E5 /* Project object */;
 }

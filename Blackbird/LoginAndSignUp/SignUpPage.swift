@@ -7,6 +7,15 @@
 
 import Foundation
 import SwiftUI
+import Security
+
+
+enum KeychainError: Error {
+    case noPassword
+    case unexpectedPasswordData
+    case unhandledError(status: OSStatus)
+}
+
 
 func createUserFromSpec(username: String, password: String, email: String, image: UIImage, full_name: String) -> ExampleUser{
     return ExampleUser(username: username, full_name: full_name, password: password, bio: "Biography", email: email, avatar: image)
@@ -19,6 +28,7 @@ struct SignUpPage: View {
     @State var user : ExampleUser = ExampleUser(username: "", full_name: "", password: "", bio: "", email: "", avatar: UIImage(named: "my-avatar")!)
     @State var username: String = ""
     @State var email: String = ""
+    @State var error: Bool = false
     @State var full_name: String = ""
     @State var password: String = ""
     @State private var isShowPhotoLibrary = false
@@ -29,15 +39,30 @@ struct SignUpPage: View {
             (result) in
             switch result {
             case .success(let exampleUser):
-                print("Successful.")
-                self.input.currentUser = exampleUser
-                self.input.login = true
+                print("Successfully created user.")
+                
+                DispatchQueue.main.async {
+                    self.input.currentUser = exampleUser
+                    self.input.login = true
+                }
+                
+                SharedWebCredentialsManager.save(account: username, password: password){ (result, optional)  in
+                    print("Tried to save web credentials.")
+                }
+                
+                if input.storedCredentials {
+                    if KeyChainStorage.saveCredentials(Credentials(username: username, password: password)) {
+                        input.storedCredentials = true
+                    }
+                }
+                
+                
                 username = ""
                 email = ""
                 password = ""
                 
             case .failure(let err):
-                print("Big Fat Fucking error")
+                print("Error inside user creation.")
                 print(err.localizedDescription)
             }
         }
@@ -46,11 +71,10 @@ struct SignUpPage: View {
 var body: some View {
     
     if (self.input.login){
-        LoginSuccess(login: self.$input.login, username: self.$input.username, settings: self.$nav.settings, messages: self.$nav.messages, currentUser: self.$input.currentUser)
+        LoginSuccess(login: self.$input.login, settings: self.$nav.settings, messages: self.$nav.messages, currentUser: self.$input.currentUser)
     } else {
         Color(red: 3/255, green: 15/255, blue: 17/255).ignoresSafeArea().overlay(
             VStack{
-                Spacer()
                 HStack{
                     Text("BlackBird \n      Messenger")
                     .font(.system(size: 20))
@@ -59,13 +83,17 @@ var body: some View {
                     .multilineTextAlignment(.leading).padding(.horizontal, 40)
                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                 }
-                Spacer()
+                if (error) {
+                    Text("Error, check your details.").foregroundColor(Color(red: 100/255, green: 52/255, blue: 57/255))
+                } else{
+                    Spacer()
+                }
                 Button(action: {
                                 self.isShowPhotoLibrary = true
                             }) {
                                 HStack {
                                     if (image != UIImage()){
-                                        Image(uiImage: image).resizable().scaledToFit()
+                                        Image(uiImage: image).resizable()
                                             .frame(width: 50, height: 50)
                                             .clipShape(Circle())
                                     } else {
@@ -81,16 +109,16 @@ var body: some View {
                             }
                 VStack{
                 TextField("", text: $username)
-                    .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty, placeholder: "Username")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).autocapitalization(.none).textContentType(.username)
+                    .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty, placeholder: "Username")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).autocapitalization(.none).textContentType(.username).disableAutocorrection(true)
                 TextField("", text: $full_name)
-                    .modifier(PlaceholderStyle(showPlaceHolder: full_name.isEmpty, placeholder: "Full Name")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10)
+                    .modifier(PlaceholderStyle(showPlaceHolder: full_name.isEmpty, placeholder: "Full Name")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).disableAutocorrection(true)
                 TextField("", text: $email)
-                    .modifier(PlaceholderStyle(showPlaceHolder: email.isEmpty, placeholder: "Email")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).keyboardType(.emailAddress).textContentType(.emailAddress)
+                    .modifier(PlaceholderStyle(showPlaceHolder: email.isEmpty, placeholder: "Email")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).keyboardType(.emailAddress).textContentType(.emailAddress).disableAutocorrection(true)
                 
                 SecureField("", text: $password){
                      handleSignUp()
                     }
-                .modifier(PlaceholderStyle(showPlaceHolder: password.isEmpty, placeholder: "Password")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).textContentType(.password)
+                .modifier(PlaceholderStyle(showPlaceHolder: password.isEmpty, placeholder: "Password")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).textContentType(.newPassword)
                 }
                 Spacer()
                 Button(action:
@@ -109,9 +137,6 @@ var body: some View {
                                                                         Text("🕊️ Back").fontWeight(.regular).foregroundColor(.white)
                                                                     })
     }
-    
-    
-    
 }
 }
 
