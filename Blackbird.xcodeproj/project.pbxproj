@@ -34,6 +34,9 @@
 		0154CEBC26DACB25009611E5 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEBB26DACB25009611E5 /* Settings.swift */; };
 		0154CEC126DAFA2D009611E5 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEC026DAFA2D009611E5 /* KeyboardHelper.swift */; };
 		0154CEC626DB67E4009611E5 /* WebCredentialsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CEC526DB67E4009611E5 /* WebCredentialsHelper.swift */; };
+		0154CECB26DBA20A009611E5 /* AuthenticatedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CECA26DBA20A009611E5 /* AuthenticatedScreen.swift */; };
+		0154CED026DBA27D009611E5 /* ConversationListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CECF26DBA27D009611E5 /* ConversationListItem.swift */; };
+		0154CED526DC175F009611E5 /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154CED426DC175F009611E5 /* CustomScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +90,9 @@
 		0154CEBB26DACB25009611E5 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		0154CEC026DAFA2D009611E5 /* KeyboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		0154CEC526DB67E4009611E5 /* WebCredentialsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebCredentialsHelper.swift; sourceTree = "<group>"; };
+		0154CECA26DBA20A009611E5 /* AuthenticatedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedScreen.swift; sourceTree = "<group>"; };
+		0154CECF26DBA27D009611E5 /* ConversationListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListItem.swift; sourceTree = "<group>"; };
+		0154CED426DC175F009611E5 /* CustomScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +199,7 @@
 				0154CEB026DAA972009611E5 /* Unique.swift */,
 				0154CEC026DAFA2D009611E5 /* KeyboardHelper.swift */,
 				0154CEC526DB67E4009611E5 /* WebCredentialsHelper.swift */,
+				0154CED426DC175F009611E5 /* CustomScrollView.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -220,6 +227,7 @@
 				0143EB9726D6DB7600C3E2E5 /* MessageContent.swift */,
 				0143EB9C26D6DC1000C3E2E5 /* ConversationView.swift */,
 				0143EBA126D6DD3A00C3E2E5 /* MessageView.swift */,
+				0154CECF26DBA27D009611E5 /* ConversationListItem.swift */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -239,6 +247,7 @@
 		0143EBB926D7E4F000C3E2E5 /* Homepage */ = {
 			isa = PBXGroup;
 			children = (
+				0154CECA26DBA20A009611E5 /* AuthenticatedScreen.swift */,
 			);
 			path = Homepage;
 			sourceTree = "<group>";
@@ -388,6 +397,7 @@
 			files = (
 				0154CE7D26D8FCDF009611E5 /* ImagePicker.swift in Sources */,
 				0154CEB626DAC102009611E5 /* Messages.swift in Sources */,
+				0154CED026DBA27D009611E5 /* ConversationListItem.swift in Sources */,
 				0154CEC626DB67E4009611E5 /* WebCredentialsHelper.swift in Sources */,
 				0143EB3026D566BE00C3E2E5 /* ContentView.swift in Sources */,
 				0143EB6E26D6A6D600C3E2E5 /* SignUpPage.swift in Sources */,
@@ -399,6 +409,7 @@
 				0143EB2E26D566BE00C3E2E5 /* BlackbirdApp.swift in Sources */,
 				0143EBA226D6DD3A00C3E2E5 /* MessageView.swift in Sources */,
 				0143EBAA26D6E07100C3E2E5 /* Data.swift in Sources */,
+				0154CED526DC175F009611E5 /* CustomScrollView.swift in Sources */,
 				0154CE8D26D97FA0009611E5 /* Credentials.swift in Sources */,
 				0143EB6526D6A68600C3E2E5 /* Placeholder.swift in Sources */,
 				0154CEA326DA8511009611E5 /* Conversation.swift in Sources */,
@@ -407,6 +418,7 @@
 				0154CE9526D981DA009611E5 /* Authentication.swift in Sources */,
 				0154CE9B26DA84D8009611E5 /* People.swift in Sources */,
 				0154CEBC26DACB25009611E5 /* Settings.swift in Sources */,
+				0154CECB26DBA20A009611E5 /* AuthenticatedScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -565,6 +577,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Blackbird/Blackbird.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Blackbird/Preview Content\"";
 				DEVELOPMENT_TEAM = VUYN7Z8LL9;
 				ENABLE_PREVIEWS = YES;
@@ -588,6 +601,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Blackbird/Blackbird.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Blackbird/Preview Content\"";
 				DEVELOPMENT_TEAM = VUYN7Z8LL9;
 				ENABLE_PREVIEWS = YES;

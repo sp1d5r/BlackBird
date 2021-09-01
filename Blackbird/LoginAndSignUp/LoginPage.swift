@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import CloudKit
+import UserNotifications
 
 class UserLogin: ObservableObject {
     @Published var login = false
@@ -22,128 +23,6 @@ class Nav: ObservableObject {
     @Published var settings = false
 }
 
-struct LoginForum : View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @EnvironmentObject var authentication: Authentication
-    
-    @State var password: String = ""
-    @State var changing = false
-    @State var error = false
-    @State var loading = false
-    @Binding var login : Bool
-    @Binding var username: String
-    @Binding var currentUser : ExampleUser
-    @Binding var storedCredentials: Bool
-    
-    
-    func handleLogin() {
-        if (username == "Elijah" && password == ""){
-            changing = true
-            do {
-                sleep(2)
-            }
-            self.login = true
-        }
-    }
-    
-    var body: some View {
-        Color(red: 3/255, green: 15/255, blue: 17/255).ignoresSafeArea().overlay(
-            VStack{
-                Spacer()
-                Spacer()
-                HStack{
-                    Text("BlackBird \n      Messenger")
-                    .font(.system(size: 20))
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.white)
-                    .multilineTextAlignment(.leading).padding(.horizontal, 40)
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                    Spacer()
-                    Spacer()
-                    Spacer()
-                    Spacer()
-                }
-                
-                if (error) {Text("Login Failed").foregroundColor(Color(red: 100/255, green: 52/255, blue: 57/255))} else {Spacer()}
-                TextField("", text: $username)
-                    .modifier(PlaceholderStyle(showPlaceHolder: username.isEmpty, placeholder: "Username")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).autocapitalization(.none).textContentType(.username).disableAutocorrection(true)
-                
-                
-                SecureField("", text: $password)
-                    .modifier(PlaceholderStyle(showPlaceHolder: password.isEmpty, placeholder: "Password")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).textContentType(.password)
-                Spacer()
-                Spacer()
-                Button(action: {
-                        loading = true
-                        tryLogin(username: username, password: password){(result) in
-                        switch result {
-                        case .success(let user):
-                            currentUser = user
-                            if !storedCredentials {
-                                if KeyChainStorage.saveCredentials(Credentials(username: username, password: password)) {
-                                    print("Credentials Saved")
-                                    storedCredentials = true
-                                }
-                            }
-                            print("Successfullly Logged in baby!!")
-                            login = true
-                        case .failure(let err):
-                            error = true
-                            print(err.localizedDescription)
-                        }
-                    }
-                    loading = false
-                }){
-                    if (!loading) {
-                        HStack {
-                            Text("Login").frame(width: UIScreen.screenWidth * 5 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 1/255, green: 0/255, blue: 0/255)).cornerRadius(10).foregroundColor(.white)
-                            if authentication.theType() != .none {
-                                
-                                Button {
-                                    authentication.requestBiometricUnlock {
-                                        (result) in
-                                        switch result {
-                                        case .success(let credentials):
-                                            username = credentials.username
-                                            password = credentials.password
-                                            
-                                            loading = true
-                                            tryLogin(username: username, password: password){(result) in
-                                            switch result {
-                                            case .success(let user):
-                                                currentUser = user
-                                                print("Successfullly Logged in baby!!")
-                                                login = true
-                                            case .failure(let err):
-                                                error = true
-                                                print(err.localizedDescription)
-                                            }
-                                        }
-                                        loading = false
-                                        case .failure(let error):
-                                            print(error)
-                                            
-                                        }
-                                    }
-                                } label : {
-                                    Image(systemName: authentication.theType() == .face ? "faceid" : "touchid")
-                                        .resizable()
-                                        .frame(width: 50, height: 50)
-                                }
-                            }
-                        }
-                    } else {
-                        Text("Loading").frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 100/255, blue: 57/255)).cornerRadius(10).foregroundColor(Color(.white))
-                    }
-                }
-                Spacer()
-            }.opacity(changing ? 0 : 1)
-        ).navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: Button(action: { self.presentationMode.wrappedValue.dismiss()}) { Text("🕊️ Back").fontWeight(.regular).foregroundColor(.white)})
-    }
-    
-}
-
 
 
 func returnFromUser(messages : inout Bool){
@@ -156,6 +35,7 @@ func goToSettings(settings: inout Bool) {
 }
 
 func logOut(login: inout Bool, settings: inout Bool){
+    deleteSubscriptions()
     login = !login
     settings = false
 }
@@ -163,6 +43,7 @@ func logOut(login: inout Bool, settings: inout Bool){
 class ObservableConversation : ObservableObject {
     @Published var conversations : [Conversation] = []
     @Published var convoUsers : [ExampleUser] = []
+    @Published var updated : Bool = true
 }
 
 struct LoginSuccess : View {
@@ -242,7 +123,6 @@ struct LoginSuccess : View {
                 }
             }
         }
-        
     }
     
     func isInConvoUsers(username: String) -> ExampleUser?{
@@ -329,23 +209,8 @@ struct LoginSuccess : View {
                             
                             // END OF BUTTON
                             
-                            ForEach(observableConversations.convoUsers, id: \.username) { user in
-                                
-                                Button(action : {goToUser(username: user.username, messages: &messages)}) {
-                                    HStack{
-                                        Image(uiImage: user.avatar)
-                                            .resizable()
-                                            .frame(width: 50, height: 50, alignment: .center)
-                                            .cornerRadius(25)
-                                        VStack{
-                                            HStack{
-                                                Text(user.full_name).fontWeight(.medium).foregroundColor(.white)
-                                                Circle().frame(maxWidth: 5, maxHeight: 5).foregroundColor(.white)
-                                            }.frame(maxWidth: .infinity, alignment: .leading).padding(.leading, 10)
-                                            Text("Hey Sexy, when are you coming? home broski!").fontWeight(.thin).foregroundColor(.white).frame(maxWidth: .infinity, maxHeight: 50)
-                                        }.frame(maxWidth: UIScreen.screenWidth*3/4, alignment: .topLeading)
-                                    }
-                                }.listRowBackground(Color(red: 3/255, green: 15/255, blue: 17/255))
+                            ForEach(observableConversations.conversations, id: \.recordID) { conversation in
+                                ConversationListItem(myUsername: currentUser.username, conversation: conversation, messages: $messages, currentConversation: $currentConversation, currentConvoUser: $currentConvoUser, changed: $observableConversations.updated)
                             }
                             
                                 
@@ -368,10 +233,17 @@ struct LoginSuccess : View {
                 // To deal with this just keep conversations here and keep user ID's in a separate page.
                 // so deal with for loops using conversations here and then return a new view
                 // this will grab the other user details render them. It'll also deal with
-                // updating the user details. 
-                
+                // updating the user details.
+                badgeReset()
                initialUpdateConversation{() -> () in print("Gets here")}
-                initialUpdateConversation{() -> () in print("Gets here")}
+                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ success, error in
+                    if success {
+                        print("Got permissions for notifications ")
+                    } else {
+                        print("------ Notification Permission failed. ----", error?.localizedDescription ?? "error")
+                    }
+                    
+                }
             })
         }
     }

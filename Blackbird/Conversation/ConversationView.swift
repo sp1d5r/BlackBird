@@ -28,7 +28,6 @@ func groupArray(messages: [Message], currentUserName: String) -> [[Message]]{
     if tmp != [] {
         finalArray.append(tmp)
     }
-    print(finalArray)
     return finalArray
 }
 
@@ -48,7 +47,8 @@ struct ConversationView : View {
     @Binding var conversationID : String
     @Binding var currentUser : ExampleUser
     @Binding var otherUser: ExampleUser
-    
+    let pub = NotificationCenter.default
+                .publisher(for: NSNotification.Name("performReload"))
     
     @ObservedObject private var keyboard = KeyboardResponder()
     
@@ -68,6 +68,9 @@ struct ConversationView : View {
         self._messages = messages
         self._currentUser = currentUser
         self._otherUser = otherUser
+        
+        UIScrollView.appearance().backgroundColor = UIColor(Color(red: 3/255, green: 15/255, blue: 17/255))
+        
     }
 
     func initMessages(){
@@ -75,11 +78,9 @@ struct ConversationView : View {
         getMessages(convoID: conversationID){(record) in
             switch record{
             case .success(let message):
-                print("Successfully retrieved a message.", message.body)
                 if (!observerableMessages.allMessages.contains(message)){
                     observerableMessages.allMessages.append(message)
                     observerableMessages.groupedMessages = groupArray(messages: observerableMessages.allMessages, currentUserName: currentUser.username)
-                    
                 }
                 // UPDATE THE LIST WHEN NEW MESSAGES GET ADDED
                 
@@ -93,12 +94,20 @@ struct ConversationView : View {
     var body: some View {
             NavigationView {
                 VStack(spacing: 0) {
-                    List {
+                    CustomScrollView(scrollToEnd: true) {
                         ForEach(observerableMessages.groupedMessages, id: \.self) { msg in
-                            MessageView(currentMessage: msg, avatar: otherUser.avatar, myUsername: currentUser.username)
+                            MessageView(currentMessage: msg, avatar: otherUser.avatar, myUsername: currentUser.username).background(Color(red: 3/255, green: 15/255, blue: 17/255).ignoresSafeArea())
                         }
+                    }.frame(maxHeight: .infinity).background(Color(red: 3/255, green: 15/255, blue: 17/255).ignoresSafeArea())
+                    
+                    
+                    
+                    /*ScrollView(.vertical) {
+                        VStack(spacing: 10) {
+                        
                         
                     }.listStyle(PlainListStyle()).frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }*/
                     HStack {
                         TextField("Message...", text: $typingMessage)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -108,8 +117,12 @@ struct ConversationView : View {
                         })
                     }.frame(maxWidth: .infinity, minHeight: CGFloat(50)).padding()
                 }.navigationBarItems(leading: Button(action: {returnFromUser(messages: &messages)}) { Text("🕊️ Back").fontWeight(.regular).foregroundColor(.white)}).navigationBarTitle(otherUser.full_name)
-                .edgesIgnoringSafeArea(keyboard.currentHeight == 0.0 ? .leading: .bottom)
-            }.onAppear(perform: {initMessages()})
+                .edgesIgnoringSafeArea(keyboard.currentHeight == 0.0 ? .leading: .bottom).offset(y: -keyboard.currentHeight*0.005)
+            }.onAppear(perform: {initMessages()}).onReceive(pub, perform: { _ in
+                DispatchQueue.main.async {
+                    initMessages()
+                }
+            })
     }
     
     func sendTypedMessage() {
@@ -117,8 +130,10 @@ struct ConversationView : View {
             switch result {
             case .success(let message):
                 print("Successfully added messsage!")
-                observerableMessages.allMessages.append(message)
-                observerableMessages.groupedMessages = groupArray(messages: observerableMessages.allMessages, currentUserName: currentUser.username)
+                DispatchQueue.main.async {
+                    observerableMessages.allMessages.append(message)
+                    observerableMessages.groupedMessages = groupArray(messages: observerableMessages.allMessages, currentUserName: currentUser.username)
+                }
             case .failure(let error):
                 print("Failed to send message")
                 print(error)

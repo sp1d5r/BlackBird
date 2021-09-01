@@ -29,6 +29,7 @@ struct SignUpPage: View {
     @State var username: String = ""
     @State var email: String = ""
     @State var error: Bool = false
+    @State var loggingIn: Bool = false
     @State var full_name: String = ""
     @State var password: String = ""
     @State private var isShowPhotoLibrary = false
@@ -40,7 +41,7 @@ struct SignUpPage: View {
             switch result {
             case .success(let exampleUser):
                 print("Successfully created user.")
-                
+                loggingIn = false
                 DispatchQueue.main.async {
                     self.input.currentUser = exampleUser
                     self.input.login = true
@@ -62,6 +63,8 @@ struct SignUpPage: View {
                 password = ""
                 
             case .failure(let err):
+                loggingIn = false
+                error = true
                 print("Error inside user creation.")
                 print(err.localizedDescription)
             }
@@ -84,7 +87,7 @@ var body: some View {
                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                 }
                 if (error) {
-                    Text("Error, check your details.").foregroundColor(Color(red: 100/255, green: 52/255, blue: 57/255))
+                    Text("Error, try refreshing app.").foregroundColor(Color(red: 100/255, green: 52/255, blue: 57/255))
                 } else{
                     Spacer()
                 }
@@ -116,6 +119,7 @@ var body: some View {
                     .modifier(PlaceholderStyle(showPlaceHolder: email.isEmpty, placeholder: "Email")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).keyboardType(.emailAddress).textContentType(.emailAddress).disableAutocorrection(true)
                 
                 SecureField("", text: $password){
+                    loggingIn = true
                      handleSignUp()
                     }
                 .modifier(PlaceholderStyle(showPlaceHolder: password.isEmpty, placeholder: "Password")).foregroundColor(.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10).textContentType(.newPassword)
@@ -123,16 +127,18 @@ var body: some View {
                 Spacer()
                 Button(action:
                         {
+                            loggingIn = true
                             handleSignUp()
                         }
-                    ){Text("Sign Up").frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 1/255, green: 0/255, blue: 0/255)).cornerRadius(10).foregroundColor(.white)}
+                ){Text(loggingIn ? "Signing Up" :"Sign Up").frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(loggingIn ?  Color(red: 45/255, green: 100/255, blue: 57/255) : Color(red: 1/255, green: 0/255, blue: 0/255)).cornerRadius(10).foregroundColor(.white)}.disabled(loggingIn)
                 
                 Spacer()
             }.sheet(isPresented: $isShowPhotoLibrary) {
                 ImagePicker(sourceType: .photoLibrary,  selectedImage: self.$image)
             }
             
-        ).navigationBarBackButtonHidden(true).navigationBarItems(leading:
+        ).navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading:
                                                                     Button(action: { self.presentationMode.wrappedValue.dismiss()}) {
                                                                         Text("🕊️ Back").fontWeight(.regular).foregroundColor(.white)
                                                                     })

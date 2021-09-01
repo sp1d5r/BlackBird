@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 extension UIScreen{
    static let screenWidth = UIScreen.main.bounds.size.width
    static let screenHeight = UIScreen.main.bounds.size.height
@@ -128,7 +127,7 @@ struct ContentView: View {
             NavigationLink(destination: SignUpPage()){
                 Text("Sign Up").font(.headline).fontWeight(.bold).foregroundColor(Color.white).frame(width: UIScreen.screenWidth * 7 / 8, height: UIScreen.screenHeight / 14).background(Color(red: 45/255, green: 52/255, blue: 57/255)).cornerRadius(10)
             }.position(x: UIScreen.screenWidth/2, y: UIScreen.screenHeight/7)
-        })
+        }).onAppear(perform: {deleteSubscriptions()})
     }
 }
 

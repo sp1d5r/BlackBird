@@ -22,6 +22,9 @@ struct MessageView : View {
                         }
                         ContentMessageView(contentMessage: currentMessage[ind].body,
                                        isCurrentUser: currentMessage[ind].sender == myUsername)
+                        if currentMessage[ind].sender != myUsername  {
+                            Spacer()
+                        }
                     }
                 }
                 
@@ -36,6 +39,9 @@ struct MessageView : View {
                     }
                     ContentMessageView(contentMessage: currentMessage[currentMessage.count - 1].body,
                                    isCurrentUser: currentMessage[currentMessage.count-1].sender == myUsername)
+                    if currentMessage[currentMessage.count - 1].sender != myUsername {
+                        Spacer()
+                    }
                 }
             
         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading).padding()

@@ -112,6 +112,7 @@ func tryLogin(username: String, password: String, completion: @escaping (Result<
     
     CKContainer.default().publicCloudDatabase.add(operations)
     
+    completion(.failure(CloudKitHelperError.recordFailure))
 }
 
 func getUserDetails(username: String, completion: @escaping (Result<ExampleUser, Error>) -> ()) {
@@ -199,10 +200,133 @@ func getConversations(username: String, completion: @escaping (Result<Conversati
     CKContainer.default().publicCloudDatabase.add(operations)
 }
 
+func getRecentMessage(convoID: String, completion: @escaping (Result<Message, Error>) -> ()) {
+    let pred = NSPredicate(format: "conversationID == %@", convoID )
+    let query = CKQuery(recordType: RecordType.Message, predicate: pred)
+    let sort = NSSortDescriptor(key: "creationDate", ascending: false)
+    query.sortDescriptors = [sort]
+    let operations = CKQueryOperation(query: query)
+    operations.resultsLimit = 1
+    
+    operations.recordFetchedBlock = { record in
+        DispatchQueue.main.async {
+            let id = record.recordID
+            guard let sender = record["sender"] as? String else {
+                completion(.failure(CloudKitHelperError.castFailure))
+                return
+            }
+            guard let recipient = record["recipient"] as? [String] else {
+                completion(.failure(CloudKitHelperError.castFailure))
+                return
+            }
+            guard let conversationID = record["conversationID"] as? String else {
+                completion(.failure(CloudKitHelperError.castFailure))
+                return
+            }
+            guard let messageType = record["messageType"] as? Int else {
+                completion(.failure(CloudKitHelperError.castFailure))
+                return
+            }
+            guard let body = record["body"] as? String else {
+                completion(.failure(CloudKitHelperError.castFailure))
+                return
+            }
+            print("finds element:", body)
+            let element = Message(recordID: id, sender: sender, recipient: recipient, conversationID: conversationID, messageType: messageType, body: body)
+            completion(.success(element))
+        }
+    }
+    
+    operations.queryCompletionBlock = { (_, err) in
+        DispatchQueue.main.async {
+            if let err = err {
+                completion(.failure(err))
+                return
+            }
+        }
+    }
+    
+    CKContainer.default().publicCloudDatabase.add(operations)
+}
+
+func deleteSubscriptions() {
+    print("Deleted")
+    let publicData = CKContainer.default().publicCloudDatabase
+    publicData.fetchAllSubscriptions { subscriptions, error in
+        if error == nil {
+            if let subscriptions = subscriptions {
+                for subscription in subscriptions {
+                    publicData.delete(withSubscriptionID: subscription.subscriptionID) { str, error in
+                        if error != nil {
+                            print(error!.localizedDescription)
+                        }
+                    }
+                }
+
+
+            }
+        } else {
+
+            print(error!.localizedDescription)
+        }
+    }
+    }
+
+
+func setNotifications(convoID: String) {
+    let database = CKContainer.default().publicCloudDatabase
+    let pred = NSPredicate(format: "conversationID == %@", convoID)
+    let newSubscription = CKQuerySubscription(recordType: RecordType.Message, predicate: pred, options: .firesOnRecordCreation)
+    let notification = CKSubscription.NotificationInfo()
+    notification.alertBody = "You have a new message"
+    notification.shouldBadge = true
+    notification.shouldSendContentAvailable = true
+
+    newSubscription.notificationInfo = notification
+    
+    /*database.fetchAllSubscriptions { subscriptions, error in
+            if error == nil {
+                if let subscriptions = subscriptions {
+                    for subscription in subscriptions {
+                        
+                        database.delete(withSubscriptionID: subscription.subscriptionID) { str, error in
+                            if error != nil {
+                                // do your error handling here!
+                                print(error!.localizedDescription)
+                            } else {
+                                print("Deleted subscription")
+                            }
+                        }
+                    }
+
+                    // more code to come!
+                }
+            } else {
+                // do your error handling here!
+                print(error!.localizedDescription)
+            }
+        }
+    
+    */
+    database.save(newSubscription) { (subscription, error) in
+         if let error = error {
+              print(error)
+              return
+         }
+
+         if let subscription = subscription {
+            print(subscription.subscriptionID)
+            print("Hurrah! We have a subscription")
+         }
+    }
+}
+
 func getMessages(convoID: String, completion: @escaping (Result<Message, Error>) -> ()) {
     print("gettting conversation:", convoID)
     let pred = NSPredicate(format: "conversationID == %@", convoID )
     let query = CKQuery(recordType: RecordType.Message, predicate: pred)
+    let sort = NSSortDescriptor(key: "creationDate", ascending: true)
+    query.sortDescriptors = [sort]
     let operations = CKQueryOperation(query: query)
     operations.resultsLimit = 100
     

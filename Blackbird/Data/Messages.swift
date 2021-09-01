@@ -17,6 +17,11 @@ struct Message : Identifiable, Equatable, Hashable {
     var conversationID: String
     var messageType: Int
     var body: String
+    
+    static func ==(lhs: Message, rhs: Message) -> Bool {
+        return lhs.recordID!.recordName == rhs.recordID!.recordName
+    }
+    
 }
 
 /*
